@@ -48,11 +48,11 @@ yarn build
 ```
 export interface ICard {
     _id: string;
-    name: string;
-    about: string;
-    cost: number;
-    caregory: string;
-    image: URL;
+    title: string;
+    description: string;
+    price: number;
+    category: string;
+    image: string;
 }
 ```
 
@@ -71,16 +71,33 @@ export interface IUser {
 Интерфейс для каталога товаров
 
 ```
-export interface ICardsData {
-    catds: ICard[];
-    preview: string | null;
+export interface ICardList {
+    cards: TCardList[];
 }
+```
+
+Интерфейс для корзины
+
+```
+export interface IBasketData {
+    cards: ICard[];
+    addCard(card: ICard): void;
+    deleteCard(cardId: string, payload: Function | null): void;
+    updateCard(card: ICard, payload: Function | null): void;
+    clearCards(cards: ICard[]): void;
+}
+```
+
+Данные товара, используемые в каталоге
+
+```
+export type TCardList = Pick<ICard, 'title' | 'price' | 'category' | 'image'>;
 ```
 
 Данные товара, используемые в корзине
 
 ```
-export type TCardInfo = Pick<ICard, 'name' | 'cost'>;
+export type TCardInfo = Pick<ICard, 'title' | 'price'>;
 ```
 
 Данные пользователя в модальном окне по оплате
@@ -108,7 +125,7 @@ export type TUserContacts = Pick<IUser, 'email' | 'tel'>;
 #### Класс Api
 Содержит в себе базовую логику отправки запросов. В конструктор передается базовый адрес сервера и опциональный объект с заголовками запросов.
 Методы:
-- `get` - выполняет GET запрос на переданный в параметрах ендпоинт и позвращает промис с объектом, которым ответил сервер
+- `get` - выполняет GET запрос на переданный в параметрах ендпоинт и возвращает промис с объектом, которым ответил сервер
 - `post` - принимает объект с данными, которые будут переданы в JSON в теле запроса, и отправляет эти данные на ендпоинт переданный как параметр при вызове метода. По умолчанию выполняется `POST` запрос, но метод запроса может быть переопределен заданием третьего параметра при вызове.
 
 #### Класс EventEmitter
@@ -120,20 +137,18 @@ export type TUserContacts = Pick<IUser, 'email' | 'tel'>;
 
 ### Слой данных
 
-#### Класс CardsData
-Класс отвечает за хранение и логику работы с данными карточек товара.\
+#### Класс BasketData
+Класс отвечает за хранение и логику работы с данными карточек товара в корзине.\
 Конструктор класса принимает инстант брокера событий\
 В полях класса хранятся следующие данные:
-- _cards: ICard[] - массив объектов карточек товара
-- _preview: string | null - id карточки товара, выбранной для добавления в корзину и для просмотра описания
+- cards: TCardInfo[] - массив объектов карточек товара корзины
 - events: IEvents - экземпляр класса `EventEmitter` для инициации событий при изменении данных
 
 Так же класс предстваляет набор методов для взаимодействия с этими данными.
-- addCard(card: ICard): void - добавляет карточку товара в корзину
+- addCard(card: TCardInfo): void - добавляет карточку товара в корзину
 - deleteCard(cardId: string, payload: Function | null): void - удаляет карточку товара из корзины
-- updateCard(card: ICard, payload: Function | null): void - обновляет данные карточки товара в корзине
-- clearCards(cards: ICard[]): void - очищает корзину
-- getList(cards: ICard[]): ICard[] - получаем список добавленных товаров в корзину
+- updateCard(card: TCardInfo, payload: Function | null): void - обновляет данные карточек товара в корзине
+- clearCards(cards: TCardInfo[]): void - очищает корзину
 - а так-же сеттеры и геттеры для сохранения и получения данных из полей класса
 
 #### Класс UserData
@@ -143,14 +158,14 @@ export type TUserContacts = Pick<IUser, 'email' | 'tel'>;
 - _id: string - id пользователя
 - payment: string - способ оплаты товара
 - address: string - адрес доставки товара
-- email: string - жлектронный адрес пользователя
+- email: string - электронный адрес пользователя
 - tel: string - номер телефона пользователя
 - events: IEvents - экземпляр класса `EventEmitter` для инициации событий при изменении данных
 
 Так же класс представляет набор методов для взаимодействия с этими данными:
-- choosePay(data: Record<keyof TUserPayAddress, string>): boolean - выбор способа оплаты и адреса пользователя
-- getContacts(data: Record<keyof TUserContacts, string>): boolean - указание почты и номера телефона пользователя
-- checkValidation(data: Record<keyof TUserContacts, string>): boolean - проверяет вводимые в форму данные на валидность
+- setUserInfo(userData: IUser): void - 
+- checkValidationAddress(data: Record<keyof TUserPayAddress, string>): boolean - проверяет данные в форме с адресом на валидность
+- checkValidationContacts(data: Record<keyof TUserContacts, string>): boolean - проверяет данные в форме с электронным адресом и номером телефона на валидность
 - clearUser(data: IUser): void - очистка данных
 
 ### Классы представления 
@@ -237,4 +252,6 @@ export type TUserContacts = Pick<IUser, 'email' | 'tel'>;
 - `success:open` - открытие модального окна подтверждения заказа
 - `address:validation` - событие сообщающее о необходимости валидации формы с данными адреса пользователя
 - `contacts:validation` - событие сообщающее о необходимости валидации формы заполнения электронной почты и номера телефона
+- `basket:changed` - изменение количества товара в корзине
 - `basket:previewClear` - очистка карзины после успешного оформления заказа
+- `user:added` - добавление данных пользователя

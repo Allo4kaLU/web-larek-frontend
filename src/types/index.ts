@@ -1,5 +1,5 @@
 export interface ICard {
-    _id: string;
+    id: string;
     title: string;
     description: string;
     price: number;
@@ -15,25 +15,45 @@ export interface IUser {
     tel: string;
 }
 
-export interface ICardsData {
+export interface ICardList {
+    cards: TCardList[];
+}
+
+export interface IBasketData {
     cards: ICard[];
-    preview: string | null;
     addCard(card: ICard): void;
-    deleteCard(cardId: string, payload: Function | null): void;
+    deleteCard(card: ICard): void;
     updateCard(card: ICard, payload: Function | null): void;
     clearCards(cards: ICard[]): void;
-    getList(cards: ICard[]): ICard[];
 }
 
 export interface IUserData {
-    choosePay(data: Record<keyof TUserPayAddress, string>): boolean;
-    getContacts(data: Record<keyof TUserContacts, string>): boolean;
-    checkValidation(data: Record<keyof TUserContacts, string>): boolean;
+    setUserInfo(userData: IUser): void;
+    checkValidationAddress(data: Record<keyof TUserPayAddress, string>): boolean;
+    checkValidationContacts(data: Record<keyof TUserContacts, string>): boolean;
     clearUser(data: IUser): void;
 }    
+
+export interface IOrder extends IUser {
+    items: string[]
+}
+
+export interface IOrderResult {
+    id: string;
+}
+
+export type TCardList = Pick<ICard, 'title' | 'price' | 'category' | 'image'>;
 
 export type TCardInfo = Pick<ICard, 'title' | 'price'>;
 
 export type TUserPayAddress = Pick<IUser, 'payment' | 'address'>;
 
 export type TUserContacts = Pick<IUser, 'email' | 'tel'>;
+
+export type ApiPostMethods = 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+
+/*export interface IApi {
+    baseUrl: string;
+    get<T>(uri: string): Promise<T>;
+    post<T>(uri: string, data: object, method?: ApiPostMethods): Promise<T>;
+}*/
