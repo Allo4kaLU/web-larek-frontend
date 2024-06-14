@@ -2,13 +2,21 @@ import './scss/styles.scss';
 import { BasketData } from "./components/BasketData";
 import { UserData } from "./components/UserData";
 import { EventEmitter, IEvents } from "./components/base/events";
+import { GoodsAPI } from './components/GoodsAPI';
+import { API_URL, CDN_URL, settings } from './utils/constants';
+import { Api } from './components/base/api'
+import { IApi } from './types';
+import { Card } from './components/Card';
 
 const events: IEvents = new EventEmitter();
 
 const basketData = new BasketData(events);
 const userData = new UserData(events);
 
-const testBasket = [        {
+//const baseApi: IApi = new Api(API_URL,settings);
+const api = new GoodsAPI(CDN_URL, API_URL,settings);
+
+/*const testBasket = [        {
             "id": "854cef69-976d-4c2a-a18c-2aa45046c390",
             "description": "Если планируете решать задачи в тренажёре, берите два.",
             "image": "/5_Dots.svg",
@@ -83,7 +91,7 @@ const testBasket = [        {
         
     ]
 
-/*basketData.cards = testBasket;
+basketData._cards = testBasket;
 
 console.log(basketData.addCard( {
     "id": "90973ae5-285c-4b6f-a6d0-65d1d760b102",
@@ -92,13 +100,28 @@ console.log(basketData.addCard( {
     "title": "Бэкенд-антистресс",
     "category": "другое",
     "price": 1000
-}))*/
+}));
 
-const testUser = 
-    {_id: 'kdk',
-        payment: 'joiu',
-        address: 'hkho',
-        email: 'khuih',
-        tel: 'huhiuh'}
+const testUser = {
+    _id: 'kdk',
+    payment: 'joiu',
+    address: 'hkho',
+    email: 'khuih',
+    tel: 'huhiuh'
+};*/
 
-userData.setUserInfo(testUser)
+//userData.setUserInfo(testUser);
+//console.log(userData.getUserInfo(testUser));
+
+
+api.getProductList()
+.then(basketData.addCard.bind(basketData))
+.catch(err => {
+    console.error(err)
+})
+
+//const testSektion = document.querySelector('.gallery');
+//const cardTemplate: HTMLTemplateElement = document.querySelector('.card-catalog');
+//const card = new Card(cardTemplate, events);
+//card.setData(testCards[0])
+//testSektion.append(card.render(testCards[0], testUser._id))

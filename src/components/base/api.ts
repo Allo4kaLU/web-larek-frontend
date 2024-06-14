@@ -1,3 +1,5 @@
+import { ensureElement } from "../../utils/utils";
+
 export type ApiListResponse<Type> = {
     total: number,
     items: Type[]
@@ -39,4 +41,9 @@ export class Api {
             body: JSON.stringify(data)
         }).then(this.handleResponse);
     }
+}
+
+export function cloneTemplate<T extends HTMLElement>(query: string | HTMLTemplateElement): T {
+    const template = ensureElement(query) as HTMLTemplateElement;
+    return template.content.firstElementChild.cloneNode(true) as T;
 }

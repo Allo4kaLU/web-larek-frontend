@@ -1,3 +1,5 @@
+
+import { ApiPostMethods } from '../components/base/api'
 export interface ICard {
     id: string;
     title: string;
@@ -50,10 +52,8 @@ export type TUserPayAddress = Pick<IUser, 'payment' | 'address'>;
 
 export type TUserContacts = Pick<IUser, 'email' | 'tel'>;
 
-export type ApiPostMethods = 'POST' | 'PUT' | 'DELETE' | 'PATCH';
-
-/*export interface IApi {
+export interface IApi {
     baseUrl: string;
     get<T>(uri: string): Promise<T>;
     post<T>(uri: string, data: object, method?: ApiPostMethods): Promise<T>;
-}*/
+}

@@ -22,6 +22,16 @@ export class UserData implements IUserData {
 		this.events.emit('user:added');
 	}
 
+	getUserInfo(userData: IUser) {
+		return {
+			_id: this._id,
+			payment: this.payment,
+			address: this.address,
+			email: this.email,
+			tel: this.tel
+		}
+	}
+
 	checkValidationAddress(data: Record<keyof TUserPayAddress, string>): boolean {
 		if (data === undefined) {
 			return false;

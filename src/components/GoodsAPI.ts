@@ -1,5 +1,5 @@
-import { ICard, IOrder, IOrderResult, IUser } from "../types";
-import { Api, ApiListResponse } from "./base/api";
+import { ICard, IOrder, IOrderResult, IApi } from "../types";
+import { Api, ApiListResponse } from './base/api'
 
 export interface IGoodsAPI {
     getProductList: () => Promise<ICard[]>;
@@ -8,7 +8,7 @@ export interface IGoodsAPI {
 }
 
 export class GoodsAPI extends Api implements IGoodsAPI {
-    readonly cdn: string;
+  readonly cdn: string;
 
     constructor(cdn: string, baseUrl: string, options?: RequestInit) {
         super(baseUrl, options);
