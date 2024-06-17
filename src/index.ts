@@ -16,7 +16,7 @@ const userData = new UserData(events);
 //const baseApi: IApi = new Api(API_URL,settings);
 const api = new GoodsAPI(CDN_URL, API_URL,settings);
 
-/*const testBasket = [        {
+const testBasket = [        {
             "id": "854cef69-976d-4c2a-a18c-2aa45046c390",
             "description": "Если планируете решать задачи в тренажёре, берите два.",
             "image": "/5_Dots.svg",
@@ -108,20 +108,20 @@ const testUser = {
     address: 'hkho',
     email: 'khuih',
     tel: 'huhiuh'
-};*/
+};
 
 //userData.setUserInfo(testUser);
 //console.log(userData.getUserInfo(testUser));
 
 
-api.getProductList()
+/*api.getProductList()
 .then(basketData.addCard.bind(basketData))
 .catch(err => {
     console.error(err)
-})
+})*/
 
-//const testSektion = document.querySelector('.gallery');
-//const cardTemplate: HTMLTemplateElement = document.querySelector('.card-catalog');
-//const card = new Card(cardTemplate, events);
-//card.setData(testCards[0])
-//testSektion.append(card.render(testCards[0], testUser._id))
+const testSektion = document.querySelector('.gallery');
+const cardTemplate: HTMLTemplateElement = document.querySelector('.card-catalog');
+const card = new Card(cardTemplate, events);
+card.setData(testBasket[0])
+testSektion.append(card.render())

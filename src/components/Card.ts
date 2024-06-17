@@ -1,5 +1,5 @@
 import { IEvents } from './base/events';
-import { ICardList } from '../types/index';
+import { ICardList, ICard } from '../types/index';
 import { Component } from './base/Components';
 import { cloneTemplate } from "./base/api";
 import { ensureElement } from '../utils/utils'
@@ -31,15 +31,13 @@ export class Card {
     }
 
 
-// setData(cardData: ICard): void - заполняет атрибуты элементов карточки данными.
-/*set _title (_title: string) {
-    this.
+ setData(cardData: ICard): void {   //заполняет атрибуты элементов карточки данными.
+    this._title.textContent = cardData.title;
+    this._description.textContent = cardData.description;
+    //this._price.textContent = cardData.price;
+    this._category.textContent = cardData.category;
+    this._image.style.backgroundImage = 'url(${cardData.link})';
 }
-
-set _description 
-set _price
-
-*/
 
 //метод возвращает полностью заполненную карточку
 render(): HTMLElement {  
