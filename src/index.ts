@@ -14,7 +14,7 @@ const basketData = new BasketData(events);
 const userData = new UserData(events);
 
 //const baseApi: IApi = new Api(API_URL,settings);
-const api = new GoodsAPI(CDN_URL, API_URL,settings);
+const api = new GoodsAPI(CDN_URL, API_URL, settings);
 
 const testBasket = [        {
             "id": "854cef69-976d-4c2a-a18c-2aa45046c390",
@@ -114,14 +114,14 @@ const testUser = {
 //console.log(userData.getUserInfo(testUser));
 
 
-/*api.getProductList()
+api.getProductList()
 .then(basketData.addCard.bind(basketData))
 .catch(err => {
     console.error(err)
-})*/
+})
 
 const testSektion = document.querySelector('.gallery');
-const cardTemplate: HTMLTemplateElement = document.querySelector('.card-catalog');
+const cardTemplate: HTMLTemplateElement = document.querySelector('#card-catalog');
 const card = new Card(cardTemplate, events);
-card.setData(testBasket[0])
+card.setData(testBasket[1])
 testSektion.append(card.render())
