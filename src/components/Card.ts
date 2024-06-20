@@ -3,56 +3,83 @@ import { ICardList, ICard } from '../types/index';
 import { Component } from './base/Components';
 import { cloneTemplate } from "./base/api";
 import { ensureElement } from '../utils/utils'
+import { CDN_URL } from '../utils/constants';
 
 export class Card extends Component<ICard> {
-    protected _element: HTMLElement;
     protected events: IEvents;
 
-    protected _title?: HTMLElement;
-    protected _description?: HTMLElement;
-    protected _price?: HTMLElement;
-    protected _category?: HTMLElement;
-    protected _image?: HTMLImageElement;
-    protected cardID: string;
+    protected _title: HTMLElement;
+    protected _description: HTMLElement;
+    protected _price: HTMLElement;
+    protected _category: HTMLElement;
+    protected _image: HTMLImageElement;
+    protected _button: HTMLButtonElement;
 
-    constructor(template: HTMLTemplateElement, events: IEvents) {
-        super(template);
-
+    constructor(protected container: HTMLElement, events: IEvents) {
+        super(container);
         this.events = events;
-        this._element = cloneTemplate(template);
 
-        this._title = this._element.querySelector('.card__title');
-        this._description = this._element.querySelector('.card__text');
-        this._price = this._element.querySelector('.card__price');
-        this._category = this._element.querySelector('.card__category');
-        this._image = this._element.querySelector('.card__image');
-    
+        this._title = this.container.querySelector('.card__title');
+        this._description = this.container.querySelector('.card__text');
+        this._price = this.container.querySelector('.card__price');
+        this._category = this.container.querySelector('.card__category');
+        this._image = this.container.querySelector('.card__image');  
+        this._button = this.container.querySelector('.button');
     }
 
 
- setData(cardData: ICard): void {   //заполняет атрибуты элементов карточки данными.
-    this._title.textContent = cardData.title;
-    //this._description.textContent = cardData.description;
-    //this._price.textContent = cardData.price;
-    this._category.textContent = cardData.category;
-    //this._image.style.backgroundImage = 'url(${cardData.link})';
+ setData(cardData: Partial<ICard>) {
+    const {title, ...otherCardData} = cardData;
+    //this._title.textContent = cardData.title;
+    Object.assign(this, otherCardData);
+    return this.container;
 }
 
-set image(value: string) {
-    this.setImage(this._image, value)
-}
-
-//метод возвращает полностью заполненную карточку
-render(): HTMLElement {  
-   return this._element;
-}
-
-/* сеттер и геттер id возвращает уникальный айди карточки
 set id(value: string) {
-    this.element.dataset.id = value;
+    this.container.dataset.id = value;
 }
 
 get id() {
-    return this.element.dataset.id || '';
+    return this.container.dataset.id || '';
+}
+
+set title(value: string) {
+    this.setText(this._title, value);
+}
+
+get title(): string {
+    return this._title.textContent || '';
+}
+
+set image(value: string) {
+    this.setImage(this._image, CDN_URL + value, this.title)
+}
+
+/*set price(value: number | null) {
+    this.setText(
+        this._price,
+        value ? + ' синапсов' : 'Бесценно'
+    );
+
+    if (this._button && value === null) {
+        this._button.disabled = true;
+    }
+}
+
+set category(value:CategoryType) {
+    if (this._category) {
+        this.setText(this._category, value);
+        this._category.classList.add(categorySelectors[value]);
+    }
 }*/
+
+set description(value: string) {
+    if (this._description) {
+        this.setText(this._description, value);
+    }
+}
+
+render(): HTMLElement {  
+    return this.container;
+ }
 }

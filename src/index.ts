@@ -123,5 +123,6 @@ api.getProductList()
 const testSektion = document.querySelector('.gallery');
 const cardTemplate: HTMLTemplateElement = document.querySelector('#card-catalog');
 const card = new Card(cardTemplate, events);
-card.setData(testBasket[1])
-testSektion.append(card.render())
+card.setData(testBasket[3])
+testSektion.append(card.setData(testBasket[3]))
+card.setData({title: 'Работает или нет?'})
