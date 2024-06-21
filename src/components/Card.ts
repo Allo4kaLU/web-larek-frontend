@@ -24,16 +24,18 @@ export class Card extends Component<ICard> {
         this._price = this.container.querySelector('.card__price');
         this._category = this.container.querySelector('.card__category');
         this._image = this.container.querySelector('.card__image');  
-        this._button = this.container.querySelector('.button');
+        this._button = this.container.querySelector('.card');
+        
+       // this._button.addEventListener('click', () => this.events.emit('card-preview:open'));
     }
 
 
- setData(cardData: Partial<ICard>) {
+ render(cardData: Partial<ICard>) {
+    if (!cardData) return this.container;
     const {title, ...otherCardData} = cardData;
-    //this._title.textContent = cardData.title;
-    Object.assign(this, otherCardData);
-    return this.container;
-}
+    this._title.textContent = cardData.title;
+    return super.render(otherCardData);
+ }
 
 set id(value: string) {
     this.container.dataset.id = value;
@@ -43,9 +45,9 @@ get id() {
     return this.container.dataset.id || '';
 }
 
-set title(value: string) {
+/*set title(value: string) {
     this.setText(this._title, value);
-}
+}*/
 
 get title(): string {
     return this._title.textContent || '';
@@ -55,7 +57,7 @@ set image(value: string) {
     this.setImage(this._image, CDN_URL + value, this.title)
 }
 
-/*set price(value: number | null) {
+set price(value: number | null) {
     this.setText(
         this._price,
         value ? + ' синапсов' : 'Бесценно'
@@ -66,7 +68,7 @@ set image(value: string) {
     }
 }
 
-set category(value:CategoryType) {
+/*set category(value:CategoryType) {
     if (this._category) {
         this.setText(this._category, value);
         this._category.classList.add(categorySelectors[value]);
@@ -79,7 +81,4 @@ set description(value: string) {
     }
 }
 
-render(): HTMLElement {  
-    return this.container;
- }
 }

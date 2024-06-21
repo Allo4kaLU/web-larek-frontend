@@ -10,7 +10,7 @@ export abstract class Component<T> {
     }
 
     // Установить текстовое содержимое
-    protected setText(element: HTMLElement, value: unknown) {
+     protected setText(element: HTMLElement, value: unknown) {
         if (element) {
             element.textContent = String(value);
         }

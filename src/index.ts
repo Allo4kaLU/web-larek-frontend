@@ -7,6 +7,8 @@ import { API_URL, CDN_URL, settings } from './utils/constants';
 import { Api } from './components/base/api'
 import { IApi } from './types';
 import { Card } from './components/Card';
+import { CardsContainer } from './components/CardsContainer';
+import { cloneTemplate } from './utils/utils';
 
 const events: IEvents = new EventEmitter();
 
@@ -113,6 +115,9 @@ const testUser = {
 //userData.setUserInfo(testUser);
 //console.log(userData.getUserInfo(testUser));
 
+events.onAll((event) => {
+    console.log(event.eventName, event.data);
+})
 
 api.getProductList()
 .then(basketData.addCard.bind(basketData))
@@ -120,9 +125,29 @@ api.getProductList()
     console.error(err)
 })
 
+
+
 const testSektion = document.querySelector('.gallery');
 const cardTemplate: HTMLTemplateElement = document.querySelector('#card-catalog');
-const card = new Card(cardTemplate, events);
-card.setData(testBasket[3])
+const cardsContainer = new CardsContainer(document.querySelector('.gallery'));
+
+const card = new Card(cloneTemplate(cardTemplate), events);
+const card1 = new Card(cloneTemplate(cardTemplate), events);
+const cardArray = [];
+cardArray.push(card.render(testBasket[2]));
+cardArray.push(card1.render(testBasket[3]))
+
+cardsContainer.render({catalog: cardArray});
+
+/*card.setData(testBasket[3])
 testSektion.append(card.setData(testBasket[3]))
-card.setData({title: 'Работает или нет?'})
+card.setData({title: 'Работает или нет?'})*/
+
+events.on('initialData: loaded', () => {
+    const cardArray = basketData.cards.map((card) => {
+  const cardInstant = new Card(cloneTemplate(cardTemplate), events);
+  return cardInstant.render(card);
+});
+
+cardsContainer.render({catalog: cardArray})
+});
